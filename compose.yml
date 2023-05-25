@@ -1,0 +1,21 @@
+version: '3.9'
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db/db:/data/db
+      - ./db/logs:/var/log/mongodb
+
+  spring-app:
+    build: ./web
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongodb
+    restart: always
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongodb
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=web
